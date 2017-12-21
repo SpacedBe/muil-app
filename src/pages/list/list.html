@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="openProfile()">
+        <ion-icon name="md-person"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title mode="ios">
+      lijst
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openMatch()">
+        <ion-icon name="md-flame"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let match of currentItems">
+      <ion-avatar item-start (click)="openProfile(match)">
+        <img [src]="match.profilePic"/>
+      </ion-avatar>
+
+      <h2>{{match.name}}</h2>
+      <p>{{match.about}}</p>
+
+      <button ion-button icon-only clear item-end (click)="openChat(match)">
+        <ion-icon name="chatboxes"></ion-icon>
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

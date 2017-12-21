@@ -17,5 +17,4 @@ export class Items {
 
   delete(item: Item) {
   }
-
 }

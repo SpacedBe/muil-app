@@ -1,0 +1,21 @@
+<div class="giphy-component">
+  <div class="giphy-container">
+    <div class="giphy-loading" *ngIf="isGiphyLoading">
+      <ion-spinner></ion-spinner>
+    </div>
+    <ion-scroll scrollX="true" class="scroll-horizontal" *ngIf="!isGiphyLoading">
+      <div class="text-center scroll-item" *ngFor="let gif of gifs" (click)="select(gif)">
+        <img [src]="gif.images.fixed_height_small.url" alt="">
+      </div>
+    </ion-scroll>
+  </div>
+
+  <ion-toolbar>
+    <ion-buttons left (click)="close()">
+      <button ion-button color="danger" class="giphy-close">
+        <ion-icon name="md-close" danger></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-input type="text" [formControl]="queryControl" placeholder="Search for a GIF..."></ion-input>
+  </ion-toolbar>
+</div>

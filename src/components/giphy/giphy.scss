@@ -1,0 +1,43 @@
+/* GIPHY v1.0.0*/
+.ios .giphy-container {
+  border-top: 1px solid #f5f5f5;
+}
+
+.giphy-container {
+  background-color: white;
+  padding: 6px;
+  height: 118px;
+  padding-bottom: 0;
+
+  .scroll-horizontal {
+    white-space: nowrap;
+    height: 112px;
+
+    .scroll-item {
+      display: inline-block;
+
+      img {
+        border-radius: 6px;
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .giphy-loading {
+    padding-top: 38px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.giphy-close {
+  font-size: 1.6em;
+  padding: 0 8px;
+}
+
+.giphy-component {
+  .text-input {
+    padding-left: 12px;
+  }
+}
+/* end of GIPHY */

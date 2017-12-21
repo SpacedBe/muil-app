@@ -1,44 +1,41 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>{{ 'SIGNUP_TITLE' | translate }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content>
-  <form (submit)="doSignup()">
+  <form *ngIf="form" [formGroup]="form" (submit)="doSignup()">
+    <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]"
+           (change)="processWebImage($event)"/>
+    <div class="profile-image-wrapper" (click)="getPicture()">
+      <div class="profile-image-placeholder"
+           *ngIf="!this.form.controls.profilePicture.value">
+        <ion-icon name="add"></ion-icon>
+        <div>
+          {{ 'ITEM_CREATE_CHOOSE_IMAGE' | translate }}
+        </div>
+      </div>
+      <div class="profile-image"
+           [style.backgroundImage]="getProfileImageStyle()"
+           *ngIf="this.form.controls.profilePicture.value">
+      </div>
+    </div>
+
     <ion-list>
-
-      <ion-item>
-        <ion-label fixed>{{ 'NAME' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name" name="name"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
-      </ion-item>
-
-      <!--
-      Want to add a Username? Here you go:
-
       <ion-item>
         <ion-label floating>Username</ion-label>
-        <ion-input type="text" [(ngModel)]="account.username" name="username"></ion-input>
+        <ion-input type="text" formControlName="username" name="username"></ion-input>
       </ion-item>
-      -->
 
       <ion-item>
-        <ion-label fixed>{{ 'PASSWORD' | translate }}</ion-label>
-        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+        <ion-label floating>Tagline</ion-label>
+        <ion-input type="text" formControlName="tagLine" name="tagLine"></ion-input>
       </ion-item>
 
       <div padding>
         <button ion-button color="primary" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
       </div>
-
     </ion-list>
   </form>
 </ion-content>

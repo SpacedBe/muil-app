@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ profile.name }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <div id="profile-bg"
+       [ngStyle]="{'background-image': 'url(https://res.cloudinary.com/shittyguide/image/upload/v1447950597/shittyapp/pages/coverImage.original/j0j5vuaqdpecza3mqnnk.png)'}"></div>
+  <div id="content">
+    <div id="profile-info">
+      <img id="profile-image" [src]="profile.profilePic">
+      <h3 id="profile-name">{{ profile.name }}</h3>
+
+      <span id="profile-description">{{ profile.about }}</span>
+    </div>
+  </div>
+</ion-content>
