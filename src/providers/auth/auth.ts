@@ -72,7 +72,7 @@ export class AuthProvider {
     return this.afAuth.idToken
       .take(1)
       .switchMap((token) => {
-        return this.http.get(`http://localhost:5000/muil-app/us-central1/likeDisLike?token=${token}&value=${value}&userId=${userId}`);
+        return this.http.get(`${this.apiUrl}likeDisLike?token=${token}&value=${value}&userId=${userId}`);
       })
       .take(1);
   }
