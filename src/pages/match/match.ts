@@ -25,9 +25,13 @@ export class MatchPage {
   loading = true;
   noMatches = false;
 
+  profile$;
+
   constructor(private auth: AuthProvider,
               private viewCtrl: ViewController,
               public navCtrl: NavController) {
+    this.profile$ = auth.$userProfile;
+
     // card BS
     this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
