@@ -45,13 +45,13 @@ exports.likeDisLike = functions.https.onRequest((req, res) => {
                   .doc(uid)
                   .collection('matches')
                   .doc(userId)
-                  .set(own.data());
+                  .set(other.data());
 
                 store.collection('users')
                   .doc(userId)
                   .collection('matches')
                   .doc(uid)
-                  .set(other.data());
+                  .set(own.data());
               });
             }
           }
