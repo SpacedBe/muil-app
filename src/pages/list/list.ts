@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, ViewController} from 'ionic-angular';
 import {Item} from '../../models/item';
 import {Items} from '../../mocks/providers/items';
+import {AuthProvider} from '../../providers/auth/auth';
+import {Observable} from 'rxjs/Observable';
 
 /**
  * Generated class for the ListPage page.
@@ -18,36 +20,43 @@ import {Items} from '../../mocks/providers/items';
 export class ListPage {
   currentItems: Item[];
 
-  constructor(
-    public navCtrl: NavController,
-    private viewCtrl: ViewController,
-    public items: Items) {
-    this.currentItems = this.items.query();
+  matches$ : Observable<any>;
+
+  constructor(private auth: AuthProvider,
+              public navCtrl: NavController,
+              private viewCtrl: ViewController) {
+  }
+
+  ionViewCanEnter() {
+    return this.auth.$loggedIn.filter(val => typeof val === 'boolean').take(1).toPromise();
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    this.matches$ = this.auth.getMatches();
   }
 
   ionViewWillEnter() {
     this.viewCtrl.showBackButton(false);
   }
 
-  openProfile(item: Item) {
-    this.navCtrl.push('ProfilePage', {
-      item: item
-    });
-  }
 
   openMatch() {
     this.navCtrl.push('MatchPage');
   }
 
+  openProfile(item: Item) {
+    // this.navCtrl.push('ProfilePage', {
+    //   item: item
+    // });
+  }
+
+
   openChat(item: Item) {
-    this.navCtrl.push('MessagePage', {
-      item: item
-    });
+    // this.navCtrl.push('MessagePage', {
+    //   item: item
+    // });
   }
 }

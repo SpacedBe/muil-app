@@ -8,6 +8,8 @@ import {
 
 import {HttpClient} from '@angular/common/http';
 import {Item} from '../../models/item';
+import {AuthProvider} from '../../providers/auth/auth';
+import {AngularFirestore} from "angularfire2/firestore";
 
 @IonicPage()
 @Component({
@@ -18,14 +20,20 @@ export class MatchPage {
   @ViewChild('myswing') swingStack: SwingStackComponent;
   @ViewChildren('mycards') swingCards: QueryList<any>;
 
-  cards: Array<any>;
   stackConfig: StackConfig;
   recentCard: string = '';
 
-  constructor(
-    private http: HttpClient,
-    private viewCtrl: ViewController,
-    public navCtrl: NavController, public navParams: NavParams) {
+  cards = [];
+
+  loading = true;
+  noMatches = false;
+
+  constructor(private http: HttpClient,
+              private auth: AuthProvider,
+              private viewCtrl: ViewController,
+              private afs: AngularFirestore,
+              public navCtrl: NavController, public navParams: NavParams) {
+    // card BS
     this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
         return Math.min(Math.abs(offsetX) / (element.offsetWidth / 2), 1);
@@ -39,22 +47,19 @@ export class MatchPage {
     };
   }
 
+  ionViewCanEnter() {
+    return this.auth.$loggedIn.filter(val => typeof val === 'boolean').take(1).toPromise();
+  }
+
   ionViewWillEnter() {
     this.viewCtrl.showBackButton(false);
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MatchPage');
   }
 
   ngAfterViewInit() {
-    // Either subscribe in controller or set in HTML
-    // this.swingStack.throwin.subscribe((event: DragEvent) => {
-    //   event.target.style.background = '#ffffff';
-    // });
-    //
-    this.cards = [{email: ''}];
-    this.addNewCards(1);
+    this.addNewCards();
   }
 
 // Called whenever we drag an element
@@ -70,33 +75,42 @@ export class MatchPage {
       color = '#' + hexCode + 'FF' + hexCode;
     }
 
+    console.log(element);
+
     element.style.background = color;
     element.style['transform'] = `translate3d(0, 0, 0) translate(${x}px, ${y}px) rotate(${r}deg)`;
   }
 
 // Connected through HTML
-  voteUp(like: boolean) {
+  voteUp(value: boolean) {
     let removedCard = this.cards.pop();
-    this.addNewCards(1);
-    if (like) {
-      this.recentCard = 'You liked: ' + removedCard.email;
-    } else {
-      this.recentCard = 'You disliked: ' + removedCard.email;
-    }
+
+    this.auth.likeDisLike(removedCard.id, value)
+      .map((data) => data.json())
+      .subscribe((res: any) => {
+        console.log(res);
+
+        if (res.match) {
+          alert('you have a new match!');
+        }
+
+        this.addNewCards();
+      });
   }
 
 // Add new cards to our array
-  addNewCards(count: number) {
-    this.http.get('https://randomuser.me/api/?results=' + count)
-      .map((data: any) => data.results)
+  addNewCards() {
+    this.auth.getMatch()
+      .map((data) => data.json())
       .subscribe(result => {
-        for (let val of result) {
-          this.cards.push(val);
-        }
-      })
+        this.cards.push(result);
+      }, () => {
+        this.noMatches = true;
+      });
   }
 
-// http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
+  // move to helper
+  // http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
   decimalToHex(d, padding) {
     var hex = Number(d).toString(16);
     padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
@@ -109,9 +123,7 @@ export class MatchPage {
   }
 
   openProfile(item: Item) {
-    this.navCtrl.push('ProfilePage', {
-      item: item
-    });
+    this.navCtrl.push('ProfilePage', {item});
   }
 
   openList() {

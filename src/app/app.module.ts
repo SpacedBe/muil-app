@@ -22,6 +22,11 @@ import {DirectivesModule} from '../directives/directives.module';
 
 import {AuthProvider} from '../providers/auth/auth';
 
+import {AngularFireAuthModule} from 'angularfire2/auth';
+import {AngularFirestoreModule} from 'angularfire2/firestore';
+import {AngularFireModule} from 'angularfire2';
+import { UploadProvider } from '../providers/upload/upload';
+
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function createTranslateLoader(http: HttpClient) {
@@ -56,6 +61,16 @@ export function provideSettings(storage: Storage) {
         deps: [HttpClient]
       }
     }),
+    AngularFireModule.initializeApp({
+      apiKey: "AIzaSyA37P4SHH1W3k8kDGEhV-CWCf6VWUrsz0g",
+      authDomain: "muil-app.firebaseapp.com",
+      databaseURL: "https://muil-app.firebaseio.com",
+      projectId: "muil-app",
+      storageBucket: "muil-app.appspot.com",
+      messagingSenderId: "856018502652"
+    }),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],
@@ -74,7 +89,8 @@ export function provideSettings(storage: Storage) {
     {provide: Settings, useFactory: provideSettings, deps: [Storage]},
     // Keep this to enable Ionic's runtime error handling during development
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    UploadProvider,
   ]
 })
 export class AppModule {

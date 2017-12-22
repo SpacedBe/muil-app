@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {
-  IonicPage, LoadingCmp, LoadingController, NavController,
+  IonicPage, LoadingController, NavController,
   ToastController
 } from 'ionic-angular';
 
@@ -10,6 +10,8 @@ import {MainPage} from '../pages';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Camera} from '@ionic-native/camera';
 import {AuthProvider} from '../../providers/auth/auth';
+
+import {UploadProvider} from '../../providers/upload/upload';
 
 @IonicPage()
 @Component({
@@ -33,11 +35,12 @@ export class SignupPage {
               public formBuilder: FormBuilder,
               public camera: Camera,
               public translateService: TranslateService,
+              public uploadProvider: UploadProvider,
               public auth: AuthProvider) {
     this.form = formBuilder.group({
       username: ['', Validators.required],
-      tagLine: [''],
-      profilePicture: ['']
+      tagLine: ['', Validators.required],
+      profilePicture: ['', Validators.required]
     });
 
     this.translateService.get('SIGNUP_ERROR')
@@ -47,6 +50,7 @@ export class SignupPage {
   }
 
   getPicture() {
+    // test this!
     if (Camera['installed']()) {
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -63,14 +67,19 @@ export class SignupPage {
   }
 
   processWebImage(event) {
-    let reader = new FileReader();
+    let loading = this.loadingCtrl.create();
 
-    reader.onload = (readerEvent) => {
-      let imageData = (readerEvent.target as any).result;
-      this.form.patchValue({'profilePicture': imageData});
-    };
+    loading.present();
 
-    reader.readAsDataURL(event.target.files[0]);
+    this.uploadProvider
+      .upload(event.target.files[0])
+      .then((file: any) => {
+        loading.dismiss();
+        this.form.patchValue({'profilePicture': file.url});
+      }, () => {
+        loading.dismiss();
+        alert('something went wrong, try again');
+      });
   }
 
   getProfileImageStyle() {
@@ -85,11 +94,13 @@ export class SignupPage {
     let loading = this.loadingCtrl.create();
 
     // Attempt to login in through our User service
-    this.auth.createUser(this.form.value.username, this.form.value.tagLine)
+    this.auth.createUser(this.form.value.username, this.form.value.tagLine, this.form.value.profilePicture)
       .then(() => {
         loading.dismiss()
-          .then(() => this.navCtrl.push(MainPage));
-      }, () => {
+          .then(() => this.navCtrl.push('MatchPage'));
+      }, (val) => {
+        console.log(val);
+
         loading.dismiss()
           .then(() => {
             let toast = this.toastCtrl.create({

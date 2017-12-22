@@ -1,10 +1,10 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons left>
-      <button ion-button icon-only (click)="openProfile()">
-        <ion-icon name="md-person"></ion-icon>
-      </button>
-    </ion-buttons>
+    <!--<ion-buttons left>-->
+    <!--<button ion-button icon-only (click)="openProfile()">-->
+    <!--<ion-icon name="md-person"></ion-icon>-->
+    <!--</button>-->
+    <!--</ion-buttons>-->
 
     <ion-title mode="ios">
       lijst
@@ -20,13 +20,13 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let match of currentItems">
+    <ion-item *ngFor="let match of matches$ | async">
       <ion-avatar item-start (click)="openProfile(match)">
-        <img [src]="match.profilePic"/>
+        <img [src]="match.picture"/>
       </ion-avatar>
 
-      <h2>{{match.name}}</h2>
-      <p>{{match.about}}</p>
+      <h2>{{match.username}}</h2>
+      <p>{{match.tagLine}}</p>
 
       <button ion-button icon-only clear item-end (click)="openChat(match)">
         <ion-icon name="chatboxes"></ion-icon>

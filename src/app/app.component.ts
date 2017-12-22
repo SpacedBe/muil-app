@@ -5,9 +5,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {Config, Nav, Platform} from 'ionic-angular';
 
 import {Settings} from '../providers/providers';
-import * as firebase from 'firebase';
-import {ListPage} from '../pages/list/list';
-import {TutorialPage} from '../pages/tutorial/tutorial';
+
+import {AngularFireAuth} from 'angularfire2/auth';
+import {AuthProvider} from '../providers/auth/auth';
 
 @Component({
   template: `
@@ -19,7 +19,13 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(public afAuth: AngularFireAuth,
+              private translate: TranslateService,
+              platform: Platform, settings: Settings,
+              private config: Config,
+              private statusBar: StatusBar,
+              private splashScreen: SplashScreen,
+              private auth: AuthProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -28,22 +34,11 @@ export class MyApp {
     });
     this.initTranslate();
 
-    firebase.initializeApp({
-      apiKey: "AIzaSyA37P4SHH1W3k8kDGEhV-CWCf6VWUrsz0g",
-      authDomain: "muil-app.firebaseapp.com",
-      databaseURL: "https://muil-app.firebaseio.com",
-      projectId: "muil-app",
-      storageBucket: "muil-app.appspot.com",
-      messagingSenderId: "856018502652"
-    });
-
-    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        this.rootPage = 'TutorialPage';
-        unsubscribe();
+    afAuth.authState.take(1).subscribe(user => {
+      if (user) {
+        this.rootPage = 'MatchPage';
       } else {
-        this.rootPage = 'ListPage';
-        unsubscribe();
+        this.rootPage = 'TutorialPage';
       }
     });
   }
