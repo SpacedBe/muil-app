@@ -33,6 +33,7 @@
     "angularfire2": "^5.0.0-rc.5-next",
     "cordova-ios": "^4.4.0",
     "cordova-plugin-device": "^1.1.4",
+    "cordova-plugin-ionic": "^2.0.4",
     "cordova-plugin-ionic-webview": "^1.1.15",
     "cordova-plugin-splashscreen": "^4.0.3",
     "cordova-plugin-statusbar": "git+https://github.com/apache/cordova-plugin-statusbar.git",
@@ -50,5 +51,14 @@
     "@ionic/app-scripts": "3.0.1",
     "typescript": "2.3.4"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-ionic": {
+        "APP_ID": "1f0d1e6d",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "auto"
+      }
+    }
+  }
 }

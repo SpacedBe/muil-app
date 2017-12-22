@@ -2,13 +2,9 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import * as firebase from 'firebase';
 import {AngularFireAuth} from 'angularfire2/auth';
 import {AngularFirestore} from 'angularfire2/firestore';
-import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-
-require('firebase/firestore');
 
 /*
   Generated class for the AuthProvider provider.
@@ -55,10 +51,6 @@ export class AuthProvider {
         // if this fails, signout & remove user
         return this.afs.collection('users').doc(newUser.uid).set({username, tagLine, picture});
       });
-  }
-
-  logoutUser(): Promise<void> {
-    return firebase.auth().signOut();
   }
 
   getMatch() {
