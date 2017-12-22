@@ -1,15 +1,13 @@
 import {Component, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {IonicPage, NavController, ViewController} from 'ionic-angular';
 
 import {
   StackConfig,
   SwingStackComponent,
 } from 'angular2-swing';
 
-import {HttpClient} from '@angular/common/http';
 import {Item} from '../../models/item';
 import {AuthProvider} from '../../providers/auth/auth';
-import {AngularFirestore} from "angularfire2/firestore";
 
 @IonicPage()
 @Component({
@@ -21,18 +19,15 @@ export class MatchPage {
   @ViewChildren('mycards') swingCards: QueryList<any>;
 
   stackConfig: StackConfig;
-  recentCard: string = '';
 
   cards = [];
 
   loading = true;
   noMatches = false;
 
-  constructor(private http: HttpClient,
-              private auth: AuthProvider,
+  constructor(private auth: AuthProvider,
               private viewCtrl: ViewController,
-              private afs: AngularFirestore,
-              public navCtrl: NavController, public navParams: NavParams) {
+              public navCtrl: NavController) {
     // card BS
     this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {

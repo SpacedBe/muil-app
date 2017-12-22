@@ -6,7 +6,6 @@ import {
 } from 'ionic-angular';
 
 import {User} from '../../providers/providers';
-import {MainPage} from '../pages';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Camera} from '@ionic-native/camera';
 import {AuthProvider} from '../../providers/auth/auth';
@@ -20,8 +19,6 @@ import {UploadProvider} from '../../providers/upload/upload';
 })
 export class SignupPage {
   @ViewChild('fileInput') fileInput;
-
-  isReadyToSave: boolean;
 
   public form: FormGroup;
 
@@ -50,6 +47,8 @@ export class SignupPage {
   }
 
   getPicture() {
+    let loading = this.loadingCtrl.create();
+
     // test this!
     if (Camera['installed']()) {
       this.camera.getPicture({
@@ -57,7 +56,21 @@ export class SignupPage {
         targetWidth: 96,
         targetHeight: 96
       }).then((data) => {
-        this.form.patchValue({'profilePicture': 'data:image/jpg;base64,' + data});
+        loading.present();
+
+        this.uploadProvider
+          .upload({
+            name: guidGenerator(),
+            base64: data
+          }, false)
+          .then((file: any) => {
+            loading.dismiss();
+            this.form.patchValue({'profilePicture': file.url});
+          }, () => {
+            loading.dismiss();
+            alert('something went wrong, try again');
+          });
+
       }, (err) => {
         alert('Unable to take photo');
       })
@@ -116,4 +129,12 @@ export class SignupPage {
 
     loading.present();
   }
+}
+
+
+function guidGenerator() {
+  var S4 = function () {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }

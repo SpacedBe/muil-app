@@ -3,11 +3,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {Config, Nav, Platform} from 'ionic-angular';
-
-import {Settings} from '../providers/providers';
-
 import {AngularFireAuth} from 'angularfire2/auth';
-import {AuthProvider} from '../providers/auth/auth';
 
 @Component({
   template: `
@@ -21,11 +17,10 @@ export class MyApp {
 
   constructor(public afAuth: AngularFireAuth,
               private translate: TranslateService,
-              platform: Platform, settings: Settings,
+              platform: Platform,
               private config: Config,
               private statusBar: StatusBar,
-              private splashScreen: SplashScreen,
-              private auth: AuthProvider) {
+              private splashScreen: SplashScreen) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

@@ -12,10 +12,15 @@ export class UploadProvider {
 
   private basePath: string = '/uploads';
 
-  upload(upload: any) {
+  upload(upload: any, form = true) {
     let storageRef = firebase.storage().ref();
+    let uploadTask;
 
-    let uploadTask = storageRef.child(`${this.basePath}/${upload.name}`).put(upload);
+    if (form) {
+      uploadTask = storageRef.child(`${this.basePath}/${upload.name}`).put(upload);
+    } else {
+      uploadTask = storageRef.child(`${this.basePath}/${upload.name}`).putString(upload.base64);
+    }
 
     return new Promise((resolve, reject) => {
       uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,

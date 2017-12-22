@@ -2,5 +2,7 @@
   "name": "muil-app",
   "app_id": "1f0d1e6d",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }

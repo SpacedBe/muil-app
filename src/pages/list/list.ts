@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, ViewController} from 'ionic-angular';
 import {Item} from '../../models/item';
-import {Items} from '../../mocks/providers/items';
 import {AuthProvider} from '../../providers/auth/auth';
 import {Observable} from 'rxjs/Observable';
 
@@ -18,8 +17,6 @@ import {Observable} from 'rxjs/Observable';
   templateUrl: 'list.html',
 })
 export class ListPage {
-  currentItems: Item[];
-
   matches$ : Observable<any>;
 
   constructor(private auth: AuthProvider,

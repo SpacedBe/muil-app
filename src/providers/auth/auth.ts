@@ -19,6 +19,8 @@ export class AuthProvider {
 
   public uid;
 
+  private apiUrl = 'https://us-central1-muil-app.cloudfunctions.net/';
+
   constructor(public http: Http,
               private afAuth: AngularFireAuth,
               private afs: AngularFirestore) {
@@ -57,7 +59,7 @@ export class AuthProvider {
     return this.afAuth.idToken
       .take(1)
       .switchMap((token) => {
-        return this.http.get('http://localhost:5000/muil-app/us-central1/getMatch?token=' + token);
+        return this.http.get(`${this.apiUrl}getMatch?token=${token}`);
       })
       .take(1);
   }

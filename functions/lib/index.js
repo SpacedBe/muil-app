@@ -23,11 +23,8 @@ exports.likeDisLike = functions.https.onRequest((req, res) => {
                 store.collection('likes').doc(userId).get()
             ]).then(([updated, likes]) => {
                 let match = false;
-                console.log(value);
-                console.log(likes.exists);
                 if (value && likes.exists) {
                     const data = likes.data();
-                    console.log(data[uid]);
                     if (data[uid] === true) {
                         match = true;
                         Promise.all([
@@ -47,10 +44,7 @@ exports.likeDisLike = functions.https.onRequest((req, res) => {
                         });
                     }
                 }
-                // do match check
-                res.send({
-                    match,
-                });
+                res.send({ match });
             });
         });
     });
@@ -74,7 +68,6 @@ exports.getMatch = functions.https.onRequest((req, res) => {
                 // this loop should stop after one hit
                 users.forEach(function (doc) {
                     if (excludes.indexOf(doc.id) > -1) {
-                        console.log('excluded', doc.id);
                         return;
                     }
                     other.push(Object.assign({}, doc.data(), { id: doc.id }));
