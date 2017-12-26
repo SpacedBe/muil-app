@@ -19,8 +19,8 @@ export class AuthProvider {
 
   public uid;
 
-  // private apiUrl = 'https://us-central1-muil-app.cloudfunctions.net/';
-  private apiUrl = 'http://localhost:5000/muil-app/us-central1/';
+  private apiUrl = 'https://us-central1-muil-app.cloudfunctions.net/';
+  //private apiUrl = 'http://localhost:5000/muil-app/us-central1/';
 
   constructor(public http: Http,
               private afAuth: AngularFireAuth,
