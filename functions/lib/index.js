@@ -27,6 +27,10 @@ exports.likeDisLike = functions.https.onRequest((req, res) => {
                     const data = likes.data();
                     if (data[uid] === true) {
                         match = true;
+                        const conv = store.collection('conversations').doc();
+                        conv.set({
+                            created: Date.now()
+                        });
                         Promise.all([
                             store.collection('users').doc(uid).get(),
                             store.collection('users').doc(userId).get(),
@@ -35,12 +39,12 @@ exports.likeDisLike = functions.https.onRequest((req, res) => {
                                 .doc(uid)
                                 .collection('matches')
                                 .doc(userId)
-                                .set(other.data());
+                                .set(Object.assign({}, other.data(), { convId: conv.id }));
                             store.collection('users')
                                 .doc(userId)
                                 .collection('matches')
                                 .doc(uid)
-                                .set(own.data());
+                                .set(Object.assign({}, own.data(), { convId: conv.id }));
                         });
                     }
                 }

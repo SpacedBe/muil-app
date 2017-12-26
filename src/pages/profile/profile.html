@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ profile.name }}</ion-title>
+    <ion-title>{{ profile$.name }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -10,10 +10,9 @@
        [ngStyle]="{'background-image': 'url(https://res.cloudinary.com/shittyguide/image/upload/v1447950597/shittyapp/pages/coverImage.original/j0j5vuaqdpecza3mqnnk.png)'}"></div>
   <div id="content">
     <div id="profile-info">
-      <img id="profile-image" [src]="profile.profilePic">
-      <h3 id="profile-name">{{ profile.name }}</h3>
-
-      <span id="profile-description">{{ profile.about }}</span>
+      <img id="profile-image" [src]="(profile$ | async)?.picture">
+      <h3 id="profile-name">{{ (profile$ | async)?.username }}</h3>
+      <span id="profile-description">{{ (profile$ | async)?.tagLine }}</span>
     </div>
   </div>
 </ion-content>

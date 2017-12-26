@@ -31,7 +31,7 @@ export class MyApp {
 
     afAuth.authState.take(1).subscribe(user => {
       if (user) {
-        this.rootPage = 'MatchPage';
+        this.rootPage = 'ListPage';
       } else {
         this.rootPage = 'TutorialPage';
       }

@@ -1,5 +1,5 @@
 import {Component, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {IonicPage, NavController, ViewController} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, ViewController} from 'ionic-angular';
 
 import {
   StackConfig,
@@ -28,6 +28,7 @@ export class MatchPage {
   profile$;
 
   constructor(private auth: AuthProvider,
+              private alertCtrl: AlertController,
               private viewCtrl: ViewController,
               public navCtrl: NavController) {
     this.profile$ = auth.$userProfile;
@@ -90,7 +91,12 @@ export class MatchPage {
         console.log(res);
 
         if (res.match) {
-          alert('you have a new match!');
+          let alert = this.alertCtrl.create({
+            title: 'Match!',
+            subTitle: 'you have a new match!',
+            buttons: ['Ok']
+          });
+          alert.present();
         }
 
         this.addNewCards();

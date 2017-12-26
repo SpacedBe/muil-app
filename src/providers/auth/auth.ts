@@ -19,7 +19,8 @@ export class AuthProvider {
 
   public uid;
 
-  private apiUrl = 'https://us-central1-muil-app.cloudfunctions.net/';
+  // private apiUrl = 'https://us-central1-muil-app.cloudfunctions.net/';
+  private apiUrl = 'http://localhost:5000/muil-app/us-central1/';
 
   constructor(public http: Http,
               private afAuth: AngularFireAuth,
@@ -64,8 +65,29 @@ export class AuthProvider {
       .take(1);
   }
 
+  getProfile(uid) {
+    return this.afs.collection('users').doc(uid).valueChanges();
+  }
+
   getMatches() {
     return this.afs.collection('users').doc(this.uid).collection('matches').valueChanges();
+  }
+
+  getMessages(convId) {
+    return this.afs
+      .collection('conversations')
+      .doc(convId)
+      .collection('messages', ref => ref.orderBy('timestamp'))
+      .valueChanges();
+  }
+
+  sendTextMessage(convId, message) {
+    return this.afs.collection('conversations').doc(convId).collection('messages').add({
+      sender: this.uid,
+      type: 'text',
+      timestamp: Date.now(),
+      message,
+    });
   }
 
   likeDisLike(userId, value) {

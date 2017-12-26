@@ -51,9 +51,9 @@ export class ListPage {
   }
 
 
-  openChat(item: Item) {
-    // this.navCtrl.push('MessagePage', {
-    //   item: item
-    // });
+  openChat(convId) {
+    this.navCtrl.push('MessagePage', {
+      convId: convId
+    });
   }
 }

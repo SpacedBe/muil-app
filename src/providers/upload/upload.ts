@@ -8,7 +8,6 @@ import 'firebase/storage';
 export class UploadProvider {
 
   constructor() {
-    console.log('Hello UploadProvider Provider');
   }
 
   private basePath: string = '/uploads';

@@ -28,7 +28,7 @@
       <h2>{{match.username}}</h2>
       <p>{{match.tagLine}}</p>
 
-      <button ion-button icon-only clear item-end (click)="openChat(match)">
+      <button ion-button icon-only clear item-end (click)="openChat(match.convId)">
         <ion-icon name="chatboxes"></ion-icon>
       </button>
     </ion-item>

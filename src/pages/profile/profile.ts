@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Items} from '../../mocks/providers/items';
+import {AuthProvider} from '../../providers/auth/auth';
+import {Observable} from 'rxjs/Observable';
 
 /**
  * Generated class for the ProfilePage page.
@@ -15,9 +17,22 @@ import {Items} from '../../mocks/providers/items';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-  profile: any;
+  profile$: Observable<{}>;
+  userId: any;
 
-  constructor(public navCtrl: NavController, navParams: NavParams, items: Items) {
-    this.profile = navParams.get('profile') || items.defaultItem;
+  constructor(public navParams: NavParams, private auth: AuthProvider) {
+    this.userId = navParams.get('userId');
+  }
+
+  ionViewDidLoad() {
+    this.profile$ = this.auth.getProfile(this.userId);
+  }
+
+  ionViewCanEnter() {
+    if (!this.userId) {
+      return false;
+    }
+
+    return this.auth.$loggedIn.filter(val => typeof val === 'boolean').take(1).toPromise();
   }
 }

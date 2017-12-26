@@ -8,28 +8,29 @@
 
 <ion-content #content padding>
   <div class="chat-list">
-    <div class="chat-item" *ngFor="let item of messages" [ngClass]="{'me': item.isMe}">
+    <div class="chat-item" *ngFor="let item of messages | async" [ngClass]="{'me': item.sender === this.userId}">
       <div class="chat-timestamp">
         {{item.timestamp}}
       </div>
 
       <div class="chat-item-content">
-        <div class="chat-avatar" *ngIf="!item.isMe">
-          <img [src]="item.avatar">
+        <div class="chat-avatar" *ngIf="!item.sender === this.userId">
+          <img [src]="item.picture">
         </div>
 
         <div class="chat-item-bubble" [ngClass]="{'bubble-image': item.type == 'image'}">
           <i class="icon-tail"></i>
-          <div class="chat-body" *ngIf="item.type !== 'image'" [innerHtml]="item.body | nlbr"></div>
+          <div class="chat-body"
+               *ngIf="item.type !== 'image'" [innerHtml]="item.message | nlbr"></div>
           <img [src]="item.body" *ngIf="item.type == 'image'">
         </div>
 
-        <div class="chat-item-reaction" *ngIf="!item.isMe && item.type == 'image'">
+        <div class="chat-item-reaction" *ngIf="!item.sender === this.userId && item.type == 'image'">
           <ion-icon name="md-heart-outline" class="text-muted text-2x"></ion-icon>
         </div>
       </div>
 
-      <div class="chat-item-status" *ngIf="item.isMe">Sent</div>
+      <div class="chat-item-status" *ngIf="item.sender === this.userId">Sent</div>
     </div>
   </div>
 </ion-content>
@@ -45,7 +46,10 @@
     </ion-buttons>
     <ion-textarea fz-elastic [(ngModel)]="typingMessage" placeholder="Type a message"></ion-textarea>
     <ion-buttons right class="stick-bottom button-submit">
-      <button type="submit" [disabled]="typingMessage.length == 0" ion-button small color="dark" (tap)="sendText(typingMessage)">
+      <button type="submit"
+              [disabled]="typingMessage.length == 0"
+              ion-button small color="dark"
+              (tap)="sendText(typingMessage)">
         Send
       </button>
     </ion-buttons>
